@@ -25,18 +25,7 @@ function getPatientPass(uint _pid) public view returns (string memory password){
       return getPatient[_pid].password;
    }
    
-   //Login
-  function FetchPatientDataById(uint _pid)public view returns(uint,string memory,string memory,string memory,string memory,address)
-  {
-      if(msg.sender == getPatient[_pid].patientAddress)
-      {
-        return(getPatient[_pid].id,getPatient[_pid].Name,getPatient[_pid].email,getPatient[_pid].bloodgroup,getPatient[_pid].gender,getPatient[_pid].patientAddress);
-      }
-      else
-      {
-          return (0,errorString,errorString,errorString,errorString,nullAddress);
-      }
-    }
+
     
 }
 

@@ -6,6 +6,7 @@ import Form from './Modal';
 import { Card, Table } from 'react-bootstrap';
 import Patients from '../abis/Patients.json';
 import { ControlLabel } from 'react-bootstrap';
+import Presc from '../abis/Presc.json'
 class Patient extends React.Component {
   async componentWillMount() {
     await this.loadWeb3()
@@ -30,19 +31,39 @@ class Patient extends React.Component {
     this.setState({ account: accounts[0] })
     const networkId = await web3.eth.net.getId()
     const networkData = Patients.networks[networkId]
+    const DoctorNetworkData = Presc.networks[networkId]
     if (networkData) {
       const contract = web3.eth.Contract(Patients.abi, networkData.address)
+      
       this.setState({ contract })
     }
       else {
         window.alert('Smart contract not deployed to detected network.')
       }
+      if (DoctorNetworkData) {
+      
+        const DoctorContract = web3.eth.Contract(Presc.abi,DoctorNetworkData.address)
+        this.setState({ DoctorContract })
+      }
+        else {
+          window.alert('Smart contract not deployed to detected network.')
+        }
+
       console.log('current logged in account ', this.state.account)
     }
     async loadBlockchainGetData(){
       await this.loadBlockchainData()
-
+      this.state.DoctorContract.methods.addMed(3,"med3")
+        .send({ from: this.state.account }).then((r) => {
+          return this.setState({
+            displayingUid: null
+          })
+        })
+      
+      const MedData = await this.state.DoctorContract.methods.getData(1).call();
+      console.log('MedData', MedData[1])
       const displayingUid = await this.state.contract.methods.getPatientId(this.state._id).call()
+
       const convertedId = displayingUid.toNumber()
       this.setState({ convertedId })
       console.log('Id binded to patient is', convertedId)
@@ -149,7 +170,8 @@ class Patient extends React.Component {
     this.state = {
 
       // VALUES NEEDED FOR CONTRACT   
-      contract: null,   // stores value of contracts
+      contract: null, 
+      DoctorContract: null,  // stores value of contracts
       web3: null,
       account: null, // stores value of logged in account
      
