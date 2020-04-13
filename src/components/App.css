@@ -1,114 +1,176 @@
 .App {
-  }
-  
-  nav {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    min-height: 10vh;
-    background: #3a7085;
-    color: azure;
-  }
-  
-  .nav-links{
-    width: 40%;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    list-style: none;
-  }
+}
+
+nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  min-height: 10vh;
+  background: #3a7085;
+  color: azure;
+}
+
+.nav-links{
+  width: 40%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  list-style: none;
+}
 
 
-  .btns {
-    box-sizing: border-box;
-    border: none;
-    border-radius: 4px;
-    padding: 0 16px;
-    min-width: 64px;
-    height: 36px;
-    vertical-align: middle;
-    text-align: center;
-    text-overflow: ellipsis;
-    text-transform: uppercase;
-    background: #3a7085;
-    color: #ffffff;
-  }
-  .bgimg{
-    width: 100%;
-    height: 500px;
-    background: url("../MMIcover.png")  no-repeat center;
-    background-size: cover;
-  }
-.bgop{
+.btns {
+  box-sizing: border-box;
+  border: none;
+  border-radius: 4px;
+  padding: 0 16px;
+  min-width: 64px;
+  height: 36px;
+  vertical-align: middle;
+  text-align: center;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  background: #3a7085;
+  color: #ffffff;
+}
+.bgimg{
   width: 100%;
   height: 500px;
-  background: rgba(0, 0, 0, 0.4);
+  background: url("../MMIcover.png")  no-repeat center;
+  background-size: cover;
+}
+.bgop{
+width: 100%;
+height: 500px;
+background: rgba(0, 0, 0, 0.4);
 }
 h1{
-    padding-top: 20px;
-    text-align: center;
-    align-items: center;
-    font-size: 60px;
-    color: #3a7085;
-    text-shadow: 0 2px 3px rgb(0,65,92.0.4);
-  }
-  h2{
-    color: #3a7085;
-  }
-  h3{
-    text-align: center;
-    align-items: center;
-    color: #3a7085;
-  }
-  .formBorder1 {
-    text-align: center;
-    display: block;
-    height: 50%;
-    width: 50%;
-    border-radius: 15px;
-    background-color: #f2f2f2;
-    padding: 20px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  }
-  .formBorder2 {
-    display: block;
-    height: 60%;
-    width: 50%;
-    border-radius: 15px;
-    background-color: #f2f2f2;
-    padding: 20px;
-    margin: auto;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  }
-  .btnops1{
-    display: block;
-    background-color: #3A6474;
-    color: azure;
-    float: right;
-    margin-right: 30px;
-    margin-top: 20px;
-  }
-  .btnops2{
-    display: block;
-    background-color: #3A6474;
-    color: azure;
-    float: left;
-    margin-right: 30px;
-    margin-top: 20px;
-  }
-  .ops{
-    background-color: #3A6474;
-    color: azure;
-  }
-  .card{
-    width: auto;
-    height: auto;
-    padding: 20px;
-    margin: auto;
-    overflow: auto;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    background-color: #3A7085;
-  }
-  .ip{
-    margin-bottom: 5px;
-  }
+  padding-top: 20px;
+  text-align: center;
+  align-items: center;
+  font-size: 60px;
+  color: #3a7085;
+  text-shadow: 0 2px 3px rgb(0,65,92.0.4);
+}
+h2{
+  color: #3a7085;
+  text-align: center;
+  align-items: center;
+}
+h3{
+  text-align: center;
+  align-items: center;
+  color: #3a7085;
+}
+.formBorder1 {
+  text-align: center;
+  display: block;
+  height: 50%;
+  width: 50%;
+  border-radius: 15px;
+  background-color: #f2f2f2;
+  padding: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+.formBorder2 {
+  display: block;
+  height: 60%;
+  width: 50%;
+  border-radius: 15px;
+  background-color: #f2f2f2;
+  padding: 20px;
+  margin: auto;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+.btnops1{
+  display: block;
+  background-color: #3A6474;
+  color: azure;
+  float: right;
+  margin-right: 30px;
+  margin-top: 20px;
+}
+.btnops2{
+  display: block;
+  background-color: #3A6474;
+  color: azure;
+  float: left;
+  margin-right: 30px;
+  margin-top: 20px;
+}
+.ops{
+  background-color: #3A6474;
+  color: azure;
+}
+.cards{
+  width: auto;
+  height: auto;
+  padding: 20px;
+  margin: auto;
+  overflow-y: auto;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  background-color: #3A7085;
+}
+.ip{
+  margin-bottom: 5px;
+}
+.cardDoc{
+  width: auto;
+  height: auto;
+  padding: 20px;
+  margin: auto;
+  overflow-y: auto;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  background-color: #F2F2F2;
+}
+.cardInfo{
+  width: auto;
+  height: auto;
+  padding: 20px;
+  margin: auto;
+  overflow-y: auto;
+  background-color: #D5DFE3;
+}
+.doctainer{
+  margin: 10px 10px 10px 10px;
+  color: #D5DFE3;
+}
+.DocCard {
+  display: block;
+  height: 80%;
+  width: 100%;
+  background-color: #f2f2f2;
+  padding: 20px;
+  margin: auto;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+.btnDoc{
+  display: block;
+  background-color: #3A6474;
+  color: azure;
+  margin-right: 30px;
+  margin-top: 20px;
+}
+
+.btnColl{
+  display: block;
+  background-color: #3A6474;
+  color: azure;
+  float: right;
+}
+
+.prevCard{
+display: block;
+  height: 60%;
+  width: 30%;
+  background-color: #f2f2f2;
+  padding: 10px;
+  margin: auto;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.prevTitle{
+color: #3A6474;
+background-color: #D5DFE3;
+font-size: 20px bold;
+}
