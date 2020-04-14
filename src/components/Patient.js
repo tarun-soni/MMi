@@ -52,16 +52,17 @@ class Patient extends React.Component {
       console.log('current logged in account ', this.state.account)
     }
     async loadBlockchainGetData(){
+      
       await this.loadBlockchainData()
-      this.state.DoctorContract.methods.addMed(3,"med3")
+    /*  this.state.DoctorContract.methods.addMed(3,"med3")
         .send({ from: this.state.account }).then((r) => {
           return this.setState({
             displayingUid: null
           })
-        })
-      
+        })*/
+    /*  
       const MedData = await this.state.DoctorContract.methods.getData(1).call();
-      console.log('MedData', MedData[1])
+      console.log('MedData', MedData[1])*/
       const displayingUid = await this.state.contract.methods.getPatientId(this.state._id).call()
 
       const convertedId = displayingUid.toNumber()
@@ -186,7 +187,7 @@ class Patient extends React.Component {
       _storedPass:'',
 
       //  STORES VALUE BY GETIING DATA FROM BC & DISPLAYING
-       showPatients: [],
+      showPatients: [],
       displayingName: '',
       displayingEmail: '',
       displayingBlood: '',
