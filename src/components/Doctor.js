@@ -6,6 +6,7 @@ import './App.css';
 import Patients from '../abis/Patients.json';
 import Presc from '../abis/Presc.json'
 import Web3 from 'web3';
+import { ControlLabel } from 'react-bootstrap';
 
 class Doctor extends React.Component {
   async componentWillMount() {
@@ -51,42 +52,23 @@ class Doctor extends React.Component {
     }
 
     console.log('current logged in account ', this.state.account)
-    console.log(this.state._presid)
-    const MedData = await this.state.DoctorContract.methods.getData(2).call();
-    console.log('MedData', MedData[1])
+
   }
   async GetPatientStaticData() {
     await this.loadBlockchainData()
-    //send for med 
-    /*
-    this.state.DoctorContract.methods.addMed(3,"med3")
-      .send({ from: this.state.account }).then((r) => {
-        return this.setState({
-          displayingUid: null
-        })
-      })
-      */
-    // send for med
-    /*const MedData = await this.state.DoctorContract.methods.getData(1).call();
-    console.log('MedData', MedData[1])
   
-  */
+  //getting id from BC
     const displayingUid = await this.state.contract.methods.getPatientId(this.state._id).call()
     const convertedId = displayingUid.toNumber()
     this.setState({ convertedId })
     console.log('Id binded to patient is', convertedId)
-
-
+  //getting Patients static data from BC
     const showPatients = await this.state.contract.methods.getPatient(this.state._id).call()
     this.setState({ showPatients })
-    console.log('in getData')
-    /*
-       this.setState({
-          showPatients: [...this.state.showPatients, showPatients]
-        })
-      */
-    /*
     
+     //  this.setState({   showPatients: [...this.state.showPatients, showPatients]})
+    
+  /*
       console.log('disp email:::::   ', this.state.showPatients[1])
       console.log('show name::::: ', this.state.showPatients[2])
       console.log('show bg:::::  ', this.state.showPatients[3])
@@ -96,9 +78,25 @@ class Doctor extends React.Component {
 
   }
 
-  getData = () => {
+
+  async GetPatientDynamicData(){
+   await this.loadBlockchainData()
+   //getting prev records of patients
+    const MedData = await this.state.DoctorContract.methods.getData(this.state._showPresInput).call();
+    console.log('MedData', MedData[1])
+  }
+
+//normal methods of get which calls thier respective async functions 
+  getStaticData = () => {
     this.loadBlockchainData()
-    this.GetPatientStaticData()
+     this.GetPatientStaticData()
+  };
+
+  getDynamicData = () => {
+    console.log("in get Dynamic",this.state._showPresInput)
+    this.loadBlockchainData()
+    this.GetPatientDynamicData()
+
   };
 
   prescribeMedicineButton = () => {
@@ -118,6 +116,9 @@ class Doctor extends React.Component {
   Medinput(Medinput) {
     this.setState({ _medInput: Medinput })
   }
+  ShowPresInput(ShowPresInput){
+    this.setState({_showPresInput: ShowPresInput})
+  }
   
   constructor(props) {
     super(props)
@@ -134,9 +135,10 @@ class Doctor extends React.Component {
       isenter: false,
 
       //input during get data
-      _id: '',
-      _presid: '',
-      _medInput:'',
+      _id: '',  
+      _presid: '',    // patient id  inputwhen prescribing
+      _medInput:'',   // medicine  input when prescribing
+      _showPresInput:'',  // patient id input when geting prev records
 
       //  STORES VALUE BY GETIING DATA FROM BC & DISPLAYING
       showPatients: [],
@@ -146,6 +148,7 @@ class Doctor extends React.Component {
     this.Uid = this.Uid.bind(this);
     this.PresID = this.PresID.bind(this);
     this.Medinput = this.Medinput.bind(this)
+    this.ShowPresInput = this.ShowPresInput.bind(this)
   }
 
   TogglePrev = () => {
@@ -182,9 +185,7 @@ class Doctor extends React.Component {
                     const PresID = this.PresIDidContent.value
                     this.PresID(PresID)
                     const Medinput = this.MedContent.value
-                    this.Medinput(Medinput)
-                    
-
+                    this.Medinput(Medinput)    
                   }}>
                     <div className="modal-header">
                       <h3 className="modal-title">Prescribe Med</h3>
@@ -223,10 +224,24 @@ class Doctor extends React.Component {
               {/* Previous Card */}
               <Form isopen={this.state.isopen}>
                 <div className="DocCard center-block modal-lg">
-                  <form>
+                <form onSubmit={(event) => {
+                  event.preventDefault()
+                  const ShowPresInput = this.showPresInputContent.value
+                  this.ShowPresInput(ShowPresInput)
+                }}>
                     <div className="modal-header">
                       <h3 className="modal-title">Patient History</h3>
+                      <input
+                              id="postContent"
+                              type="number"
+                              ref={(input) => { this.showPresInputContent = input }}
+                              className="form-control"
+                              placeholder="Enter Patient ID who's records you want to see"
+                              required />
+                     
+                      <button onClick ={ this.getDynamicData }> Get Previous Pres</button>
                       <button type="button" className="close text-danger" onClick={this.TogglePrev}>&times;</button>
+                      
                     </div>
                     {/* Its Accordion Bootstrap */}
                     <Accordion className="prevTitle">
@@ -283,7 +298,7 @@ class Doctor extends React.Component {
                               required />
                           </td>
                           <td>
-                            <button type="submit" className="btn btn-info" onClick={this.getData}>Get</button>
+                            <button type="submit" className="btn btn-info" onClick={this.getStaticData}>Get</button>
                           </td>
                         </tr>
                         <tr>    <td>Patient ID:</td><td> <td>{this.state.convertedId}</td></td>   </tr>
