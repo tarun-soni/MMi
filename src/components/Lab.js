@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Web3 from 'web3';
 import './App.css';
 import Meme from '../abis/Meme.json';
+import Presc from '../abis/Presc.json';
 
 const ipfsClient = require('ipfs-http-client')
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' }) // leaving out the arguments will default to these values
@@ -32,6 +33,10 @@ class Lab extends Component {
     this.setState({ account: accounts[0] })
     const networkId = await web3.eth.net.getId()
     const networkData = Meme.networks[networkId]
+
+    //pres
+    const DoctorNetworkData = Presc.networks[networkId]
+
     if (networkData) {
       const contract = web3.eth.Contract(Meme.abi, networkData.address)
       this.setState({ contract })
@@ -42,9 +47,49 @@ class Lab extends Component {
     } else {
       window.alert('Smart contract not deployed to detected network.')
     }
+
+
+    if(DoctorNetworkData){
+      const DoctorContract = web3.eth.Contract(Presc.abi, DoctorNetworkData.address)
+      this.setState({ DoctorContract })
+    }else{
+      window.alert('Smart contract not deployed to detected network.')
+    }
     console.log(accounts)
   }
 
+  async GetPatientDynamicData(){
+    await this.loadBlockchainData()
+    //getting prev records of patients
+     const MedData = await this.state.DoctorContract.methods.getData(1).call();
+     console.log('ID', MedData[0].toNumber())
+     
+ 
+     console.log('MedData', MedData[1])
+   
+     console.log('reqreport', MedData[2])
+ 
+     console.log('isresolved', MedData[3])
+
+   //  for(var i = 1;i<4;i++){
+       for(var j = 0;j<MedData[1].length;j++){
+        console.log('MedData', MedData[1][j])
+   }
+  //  }
+
+  for(var j = 0;j<MedData[3].length;j++){
+    if(MedData[3][j] == "false"){
+      console.log("reports required",MedData[2][j]);
+    }
+   }
+  }
+
+
+   getDynamicData = () => {
+    console.log("in get Dynamic")
+    this.loadBlockchainData()
+    this.GetPatientDynamicData()  
+  };
   constructor(props) {
     super(props)
 
@@ -83,8 +128,6 @@ class Lab extends Component {
         return this.setState({ memeHash: result[0].hash })
 
       })
-
-
       this.state.contract.methods.setRandom(this.state.randomt).send({ from: this.state.account }).then((r) => {
         return this.setState({ randomf: this.state.randomt })
 
@@ -99,6 +142,7 @@ class Lab extends Component {
       <div>
          <h1> Lab Report </h1>
         <div className="formBorder1 container-fluid mt-5">
+
           <div className="row">
             <main role="main" className="col-lg-12 d-flex text-center">
               <div className="content mr-auto ml-auto">
@@ -111,7 +155,7 @@ class Lab extends Component {
                   <input type='file' onChange={this.captureFile} />
                   <input className="btns" type='submit' />
                 </form>
-
+    <button onClick={this.getDynamicData} >Get Reports</button>
               </div>
             </main>
           </div>

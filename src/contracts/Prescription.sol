@@ -1,23 +1,64 @@
 pragma solidity ^0.5.0;
 pragma experimental ABIEncoderV2;
 contract Presc {
-    uint public Pcount=0;
-struct pres {
-  uint id;
-  string[] meds;
-
-}
+    uint public index ;
+    string public lastTestStringResult; 
+  
+  struct pres {
+    uint id;
+    uint []ReqRep;
+    string[] meds;
+    string[] RequestReport;
+    string[] isResolved;
+  }
+  
 mapping(uint => pres) public userStructs;
 
-function addMed(uint _id, string memory med) public  {
- userStructs[_id].id = _id;
+function addMed(uint _id, string memory med, string memory _reqRep) public  {
+userStructs[_id].id = _id;
   userStructs[_id].meds.push(med);
-
-}
- function getData(uint _pid) public view returns (uint, string[] memory){
-     
-      return (userStructs[_pid].id,userStructs[_pid].meds);
-    //  return (userStructs[_pid].id,userStructs[_pid].meds[1]);
-      
+  userStructs[_id].RequestReport.push(_reqRep);
+ // if(userStructs[_id].ReqRep.length == 0){
+    index = (userStructs[_id].ReqRep.length);
+  /*}else
+  {
+      index = ( userStructs[_id].ReqRep.length);
+  }*/
+userStructs[_id].ReqRep.push(index);
+    bool compBool =  compareStrings((userStructs[_id].RequestReport[index]),"");
+        if(!compBool){
+                userStructs[_id].isResolved.push("false");
+        }
+        else{
+                userStructs[_id].isResolved.push("null");
+        }
+    }
+  function compareStrings (string memory a, string memory b) public  returns (bool) {
+            return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))) );
+       }
+       
+         
+function getData(uint _pid) public view returns (uint, string[] memory,string[] memory,string[] memory){
+      return (userStructs[_pid].id,userStructs[_pid].meds,userStructs[_pid].RequestReport,userStructs[_pid].isResolved);
    }
+   
+    
+  function getReportForLab(uint _pid) public  returns(string[] memory){
+      string[]  memory falseStatusReports;
+      uint  ind= 0;
+      
+      for(uint i=0;i<userStructs[_pid].isResolved.length;i++){
+        bool compBool =  compareStrings((userStructs[_pid].isResolved[i]),"false");
+        if(compBool){
+            falseStatusReports[ind] =   userStructs[_pid].RequestReport[i];
+         //   falseStatusReports.push(userStructs[_pid].RequestReport[i]);        
+              ind++;
+        }
+        else{
+              revert("");
+               // userStructs[_id].isResolved.push("null");
+        }
+      }
+      return(falseStatusReports);
+    }
 }

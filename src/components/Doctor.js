@@ -43,16 +43,13 @@ class Doctor extends React.Component {
       window.alert('Smart contract not deployed to detected network.')
     }
     if (DoctorNetworkData) {
-
       const DoctorContract = web3.eth.Contract(Presc.abi, DoctorNetworkData.address)
       this.setState({ DoctorContract })
     }
     else {
       window.alert('Smart contract not deployed to detected network.')
     }
-
     console.log('current logged in account ', this.state.account)
-
   }
   async GetPatientStaticData() {
     await this.loadBlockchainData()
@@ -83,7 +80,13 @@ class Doctor extends React.Component {
    await this.loadBlockchainData()
    //getting prev records of patients
     const MedData = await this.state.DoctorContract.methods.getData(this.state._showPresInput).call();
+    console.log('ID', MedData[0].toNumber())
+
     console.log('MedData', MedData[1])
+
+    console.log('reqreport', MedData[2])
+
+    console.log('isresolved', MedData[3])
   }
 
 //normal methods of get which calls thier respective async functions 
@@ -209,7 +212,7 @@ class Doctor extends React.Component {
                     <button type = "submit" className="btn btnDoc" >Save Info</button>
                     <button type = "submit" className="btn btnDoc" onClick={(event) => {
                       console.log(this.state._presid)
-                      this.state.DoctorContract.methods.addMed(this.state._presid, this.state._medInput)
+                      this.state.DoctorContract.methods.addMed(this.state._presid, this.state._medInput,"")
                         .send({ from: this.state.account }).then((r) => {
                           return this.setState({
                             _presid: this.state._presid
