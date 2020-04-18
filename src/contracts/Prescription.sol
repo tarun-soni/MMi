@@ -1,18 +1,19 @@
 pragma solidity ^0.5.0;
 pragma experimental ABIEncoderV2;
 contract Presc {
+    // uint ReportLength = RequestReport.length;
+   // uint public ReqRep=0;
     uint public index ;
     string public lastTestStringResult; 
-  
-  struct pres {
-    uint id;
-    uint []ReqRep;
-    string[] meds;
-    string[] RequestReport;
-    string[] isResolved;
-  }
-  
+struct pres {
+  uint id;
+uint []ReqRep;
+  string[] meds;
+  string[] RequestReport;
+  string[] isResolved;
+}
 mapping(uint => pres) public userStructs;
+
 
 function addMed(uint _id, string memory med, string memory _reqRep) public  {
 userStructs[_id].id = _id;
@@ -27,7 +28,7 @@ userStructs[_id].id = _id;
 userStructs[_id].ReqRep.push(index);
     bool compBool =  compareStrings((userStructs[_id].RequestReport[index]),"");
         if(!compBool){
-                userStructs[_id].isResolved.push("false");
+                userStructs[_id].isResolved.push("pending");
         }
         else{
                 userStructs[_id].isResolved.push("null");
@@ -42,23 +43,11 @@ function getData(uint _pid) public view returns (uint, string[] memory,string[] 
       return (userStructs[_pid].id,userStructs[_pid].meds,userStructs[_pid].RequestReport,userStructs[_pid].isResolved);
    }
    
+   
     
-  function getReportForLab(uint _pid) public  returns(string[] memory){
-      string[]  memory falseStatusReports;
-      uint  ind= 0;
-      
-      for(uint i=0;i<userStructs[_pid].isResolved.length;i++){
-        bool compBool =  compareStrings((userStructs[_pid].isResolved[i]),"false");
-        if(compBool){
-            falseStatusReports[ind] =   userStructs[_pid].RequestReport[i];
-         //   falseStatusReports.push(userStructs[_pid].RequestReport[i]);        
-              ind++;
-        }
-        else{
-              revert("");
-               // userStructs[_id].isResolved.push("null");
-        }
-      }
-      return(falseStatusReports);
+    function updateArray(uint _id, string[] memory _reqRep) public {
+      //  userStructs[_id].meds.push(med);
+        userStructs[_id].RequestReport = _reqRep;
+      //  userStructs[_id].isResolved[];
     }
 }

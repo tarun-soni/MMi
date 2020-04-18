@@ -62,24 +62,26 @@ class Lab extends Component {
     await this.loadBlockchainData()
     //getting prev records of patients
      const MedData = await this.state.DoctorContract.methods.getData(1).call();
-     console.log('ID', MedData[0].toNumber())
+     this.setState({MedData : MedData})
+     console.log('ID', this.state.MedData[0].toNumber())
      
  
-     console.log('MedData', MedData[1])
+    // console.log('MedData', this.state.MedData[1])
    
-     console.log('reqreport', MedData[2])
+     console.log('reqreport', this.state.MedData[2])
  
-     console.log('isresolved', MedData[3])
+     console.log('isresolved', this.state.MedData[3])
 
    //  for(var i = 1;i<4;i++){
        for(var j = 0;j<MedData[1].length;j++){
         console.log('MedData', MedData[1][j])
+        console.log('loop value',j)
    }
   //  }
 
   for(var j = 0;j<MedData[3].length;j++){
-    if(MedData[3][j] == "false"){
-      console.log("reports required",MedData[2][j]);
+    if(MedData[3][j] == "pending"){
+      console.log("reports required",this.state.MedData[2][j]);
     }
    }
   }
@@ -89,6 +91,16 @@ class Lab extends Component {
     console.log("in get Dynamic")
     this.loadBlockchainData()
     this.GetPatientDynamicData()  
+   /* const Struct = (...keys) => ((...v) => keys.reduce((o, k, i) => {o[k] = v[i]; return o} , {}))
+    const Item = Struct('requestReport', 'isReolved')
+    var myItems = [
+        Item(this.state.MedData[2][1], this.state.MedData[3])
+    ];
+    
+    console.log(myItems);
+    console.log(myItems[0].requestReport);
+    console.log(myItems[0].isReolved);
+*/
   };
   constructor(props) {
     super(props)
@@ -99,6 +111,8 @@ class Lab extends Component {
       web3: null,
       buffer: null,
       account: null,
+      MedData:'',
+
       randomt: null,
       randomf: ''
     }
@@ -161,17 +175,9 @@ class Lab extends Component {
           </div>
         </div>
       </div >
-
-
-
     );
-
-
-
   }
-
-
-
 }
+
 
 export default Lab;

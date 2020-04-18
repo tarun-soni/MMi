@@ -1,12 +1,12 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Table, Accordion, Card, Button } from 'react-bootstrap';
+import { Table, Card} from 'react-bootstrap';
 import Form from './Modal';
 import './App.css';
+import Dcard from './Dcard';
 import Patients from '../abis/Patients.json';
 import Presc from '../abis/Presc.json'
 import Web3 from 'web3';
-import { ControlLabel } from 'react-bootstrap';
 
 class Doctor extends React.Component {
   async componentWillMount() {
@@ -80,14 +80,20 @@ class Doctor extends React.Component {
    await this.loadBlockchainData()
    //getting prev records of patients
     const MedData = await this.state.DoctorContract.methods.getData(this.state._showPresInput).call();
+
+    console.log(MedData);
     console.log('ID', MedData[0].toNumber())
 
-    console.log('MedData', MedData[1])
-
-    console.log('reqreport', MedData[2])
-
-    console.log('isresolved', MedData[3])
+    this.setState({mData: MedData[1]})
+    this.setState({lengthOfMed:MedData[1].length})
+    
+    console.log('MedData', this.state.mData)
+    this.setState({rData: MedData[2]})
+    console.log('reqreport', this.state.rData)
+    this.setState({sData: MedData[3]})
+    console.log('isresolved', this.state.sData)
   }
+
 
 //normal methods of get which calls thier respective async functions 
   getStaticData = () => {
@@ -122,6 +128,12 @@ class Doctor extends React.Component {
   ShowPresInput(ShowPresInput){
     this.setState({_showPresInput: ShowPresInput})
   }
+  ReportInput(ReportInput){
+    this.setState({_reportInput: ReportInput})
+  }
+  // getArray(getArray){
+  //   this.setState({cData: getArray})
+  // }
   
   constructor(props) {
     super(props)
@@ -142,17 +154,40 @@ class Doctor extends React.Component {
       _presid: '',    // patient id  inputwhen prescribing
       _medInput:'',   // medicine  input when prescribing
       _showPresInput:'',  // patient id input when geting prev records
+      _reportInput:'',
 
       //  STORES VALUE BY GETIING DATA FROM BC & DISPLAYING
       showPatients: [],
       convertedId: '',
+
+      lengthOfMed:'',
+      mData: [],
+      rData: [],
+      sData: [] 
     }
 
     this.Uid = this.Uid.bind(this);
     this.PresID = this.PresID.bind(this);
     this.Medinput = this.Medinput.bind(this)
     this.ShowPresInput = this.ShowPresInput.bind(this)
+    this.ReportInput = this.ReportInput.bind(this)
+
   }
+
+showCards = () =>{
+  let Cards = []
+  for(let i = 0; i<this.state.lengthOfMed ;i++){
+    Cards.push(
+      <Dcard
+      className="Dcard"
+      mName={this.state.mData[i]}
+      pReport={this.state.rData[i]}
+      status={this.state.sData[i]}
+      />
+    )
+  }
+  return Cards
+}
 
   TogglePrev = () => {
     this.setState({
@@ -164,7 +199,6 @@ class Doctor extends React.Component {
       isenter: !this.state.isenter
     });
   };
-
 
   render() {
     return (
@@ -189,6 +223,8 @@ class Doctor extends React.Component {
                     this.PresID(PresID)
                     const Medinput = this.MedContent.value
                     this.Medinput(Medinput)    
+                    const ReportInput = this.ReportInputContent.value
+                    this.ReportInput(ReportInput) 
                   }}>
                     <div className="modal-header">
                       <h3 className="modal-title">Prescribe Med</h3>
@@ -208,11 +244,18 @@ class Doctor extends React.Component {
                       placeholder="Prescribe Medicine"
                     ref={(input) => { this.MedContent = input }}
                     />
+                    <input
+                      id="postContent"
+                      type="text"
+                      className="form-control"
+                      placeholder="Request Report"
+                    ref={(input) => { this.ReportInputContent = input }}
+                    />
                     <hr />
                     <button type = "submit" className="btn btnDoc" >Save Info</button>
                     <button type = "submit" className="btn btnDoc" onClick={(event) => {
                       console.log(this.state._presid)
-                      this.state.DoctorContract.methods.addMed(this.state._presid, this.state._medInput,"")
+                      this.state.DoctorContract.methods.addMed(this.state._presid, this.state._medInput, this.state._reportInput)
                         .send({ from: this.state.account }).then((r) => {
                           return this.setState({
                             _presid: this.state._presid
@@ -233,45 +276,28 @@ class Doctor extends React.Component {
                   this.ShowPresInput(ShowPresInput)
                 }}>
                     <div className="modal-header">
-                      <h3 className="modal-title">Patient History</h3>
-                      <input
+                      <h3>Patient History</h3>
+                      <button type="button" className="close text-danger" onClick={this.TogglePrev}>&times;</button>                      
+                    </div>
+                    <div className="modal-body">
+                    <div class="input-group mb-3">
+                    <input
                               id="postContent"
                               type="number"
                               ref={(input) => { this.showPresInputContent = input }}
                               className="form-control"
                               placeholder="Enter Patient ID who's records you want to see"
                               required />
-                     
-                      <button onClick ={ this.getDynamicData }> Get Previous Pres</button>
-                      <button type="button" className="close text-danger" onClick={this.TogglePrev}>&times;</button>
-                      
+                              <div class="input-group-append">
+                      <button className="btn btnColl" onClick ={ this.getDynamicData }> Get Patient History</button>
+                      </div>
                     </div>
-                    {/* Its Accordion Bootstrap */}
-                    <Accordion className="prevTitle">
-                      <Card>
-                        <Card.Header>
-                          <h4>Report 1</h4>
-                          <Accordion.Toggle className="btn btnColl" as={Button} eventKey="0">
-                            Click
-                        </Accordion.Toggle>
-                        </Card.Header>
-                        <Accordion.Collapse eventKey="0">
-                          <Card.Body>this is report 1</Card.Body>
-                        </Accordion.Collapse>
-                      </Card>
-                      <Card>
-                        <Card.Header>
-                          <h4>Report 2</h4>
-                          <Accordion.Toggle className="btn btnColl" as={Button} eventKey="1">
-                            Click
-                        </Accordion.Toggle>
-                        </Card.Header>
-                        <Accordion.Collapse eventKey="1">
-                          <Card.Body>this is report 2</Card.Body>
-                        </Accordion.Collapse>
-                      </Card>
-                    </Accordion>
-                    {/* Its Compplicated dont touch this */}
+                    <div className="cardcon">
+                      {/* dynamic cards*/}
+                      {this.showCards()}
+                    {/* dynamic cards */}
+                    </div>
+                    </div>
                   </form>
                 </div>
               </ Form>

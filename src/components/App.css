@@ -57,7 +57,7 @@ h2{
   text-align: center;
   align-items: center;
 }
-h3{
+h3,h5{
   text-align: center;
   align-items: center;
   color: #3a7085;
@@ -119,6 +119,7 @@ h3{
   height: auto;
   padding: 20px;
   margin: auto;
+  border-radius: 15px;
   overflow-y: auto;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   background-color: #F2F2F2;
@@ -128,6 +129,8 @@ h3{
   height: auto;
   padding: 20px;
   margin: auto;
+
+  border-radius: 15px;
   overflow-y: auto;
   background-color: #D5DFE3;
 }
@@ -138,6 +141,8 @@ h3{
 .DocCard {
   display: block;
   height: 80%;
+
+  border-radius: 15px;
   width: 100%;
   background-color: #f2f2f2;
   padding: 20px;
@@ -165,6 +170,8 @@ display: block;
   width: 30%;
   background-color: #f2f2f2;
   padding: 10px;
+
+  border-radius: 15px;
   margin: auto;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
@@ -173,4 +180,26 @@ display: block;
 color: #3A6474;
 background-color: #D5DFE3;
 font-size: 20px bold;
+}
+
+.Dcard{
+  display: flex;
+  float: left;
+  height: auto;
+  width: 40%;
+
+  border-radius: 15px;
+  background-color: #f2f2f2;
+  margin: 5px 5px 5px 5px;
+  padding: 10px 10px 10px 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+.cardcon{
+  display: table;
+  height: auto;
+  width: 100%;
+
+  border-radius: 15px;
+  background-color: #3A7085;
+  padding: 10px 10px 10px 10px;
 }
