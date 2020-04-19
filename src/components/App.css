@@ -203,3 +203,17 @@ font-size: 20px bold;
   background-color: #3A7085;
   padding: 10px 10px 10px 10px;
 }
+.DisplayCard{
+  height: 100%;
+  width: 40%;
+  border-radius: 15px;
+  background-color: #f2f2f2;
+  margin: auto;
+  padding: 10px 10px 10px 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+.centor{
+  width: 35%;
+  height: 100%;
+  margin: auto;
+}

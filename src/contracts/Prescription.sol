@@ -45,9 +45,9 @@ function getData(uint _pid) public view returns (uint, string[] memory,string[] 
    
    
     
-    function updateArray(uint _id, string[] memory _reqRep) public {
+    function updateArray(uint _id, string[] memory _reqRep,string[] memory _isResolved) public {
       //  userStructs[_id].meds.push(med);
         userStructs[_id].RequestReport = _reqRep;
-      //  userStructs[_id].isResolved[];
+     userStructs[_id].isResolved = _isResolved;
     }
 }
