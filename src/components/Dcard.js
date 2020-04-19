@@ -1,9 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Card, Button} from 'react-bootstrap';
+import {Card} from 'react-bootstrap';
 import './App.css';
-import memeHash from './Lab';
-import { render } from 'react-dom';
 
 const Dcard = (props) => {
 // if true

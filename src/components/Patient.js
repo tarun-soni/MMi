@@ -250,7 +250,7 @@ class Patient extends React.Component {
               <hr />
               <Card className="card">
                 {/* <h4>Address binded: {this.state.displayingAddress}</h4> */}
-                <Table className="text-light" striped bordered hover>
+                <Table className="text-dark" bordered >
                   <thead>
                     <tr>
                       <th>ID</th>

@@ -27,9 +27,10 @@ function choice() {
 const Home = () => (
   <div>
     <h1>Maintaining Medical Informatics</h1>
-    <h3>Corona Virus Prevention Tips</h3>
+    <h5>Covid-19 Preventive Measures</h5>
     <div className="formBorder1 container-fluid mt-5">
         <img src={coverPic} />
+        {/* <iframe src={`https://www.trackcorona.live/map`} height="300" width="590" ></iframe> */}
       </div>
     </div>
   
