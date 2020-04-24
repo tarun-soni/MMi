@@ -288,7 +288,7 @@ showCards = () =>{
                               className="form-control"
                               placeholder="Enter Patient ID who's records you want to see"
                               required />
-                              <div class="input-group-append">
+                              <div className="input-group-append">
                       <button className="btn btnColl" onClick ={ this.getDynamicData }> Get Patient History</button>
                       </div>
                     </div>

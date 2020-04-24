@@ -18,7 +18,7 @@ const Dcard = (props) => {
         <Card className="Dcard card">
         <h5>MedNAME:{props.mName} </h5>
         <h5>Reports:{props.pReport}</h5>
-        <h5>PID:{props.status}</h5>
+        <h5>Pending status:{props.status}</h5>
         <a className="btn btnColl" href={`https://ipfs.infura.io/ipfs/${props.pReport}`}>View Reports</a>
         </Card>
      
@@ -29,7 +29,7 @@ const Dcard = (props) => {
             <Card className="Dcard card">
             <h5>MedNAME:{props.mName} </h5>
             <h5>Reports:{props.pReport}</h5>
-            <h5>PID:{props.status}</h5>
+            <h5>Pending status:{props.status}</h5>
             <a className="btn btn-danger">Reports pending</a>
             </Card>
           );  
@@ -39,7 +39,7 @@ const Dcard = (props) => {
             <Card className="Dcard card">
             <h5>MedNAME:{props.mName} </h5>
             <h5>Reports:{props.pReport}</h5>
-            <h5>PID:{props.status}</h5>
+            <h5>Pending status:{props.status}</h5>
             <a className="btn btn-warning">No Reports</a>
             </Card>
         );
