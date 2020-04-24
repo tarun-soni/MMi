@@ -6,6 +6,7 @@ import Form from './Modal';
 import { Card, Table } from 'react-bootstrap';
 import Patients from '../abis/Patients.json';
 import { ControlLabel } from 'react-bootstrap';
+import Dcard from './Dcard'
 import Presc from '../abis/Presc.json'
 class Patient extends React.Component {
   async componentWillMount() {
@@ -104,11 +105,39 @@ class Patient extends React.Component {
      this.setState({ displayingBlood: null })
      this.setState({ displayingGender: null })
      this.setState({ displayingAddress: null })
+     this.setState({_id: 1000000000})
 
      }
      
+
+//get reports 
+const MedData = await this.state.DoctorContract.methods.getData(this.state._id).call();
+
+this.setState({mData: MedData[1]})
+this.setState({lengthOfMed:MedData[1].length})
+
+console.log('MedData', this.state.mData)
+this.setState({rData: MedData[2]})
+console.log('reqreport', this.state.rData)
+this.setState({sData: MedData[3]})
+console.log('isresolved', this.state.sData)
+
+
     }
-  
+    showCards = () =>{
+      let Cards = []
+      for(let i = 0; i<this.state.lengthOfMed ;i++){
+        Cards.push(
+          <Dcard
+          className="Dcard"
+          mName={this.state.mData[i]}
+          pReport={this.state.rData[i]}
+          status={this.state.sData[i]}
+          />
+        )
+      }
+      return Cards
+    }
   //Modal Related Funtions
   getData = () => {
     this.loadBlockchainGetData()
@@ -195,6 +224,12 @@ class Patient extends React.Component {
       displayingUid: '',
       convertedId: '',
       displayingAddress: '',
+
+      lengthOfMed:'',
+      mData: [],
+      rData: [],
+      sData: [] , 
+
       //  TOGGLE  
       isopen: false,
       isenter: false
@@ -258,7 +293,6 @@ class Patient extends React.Component {
                       <th>Email</th>
                       <th>Blood Group</th>
                       <th>Gender</th>
-                      <th>Reports</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -271,6 +305,7 @@ class Patient extends React.Component {
                     </tr>
                   </tbody>
                 </Table>
+                {this.showCards()}
               </Card>
             </div>
           </ Form>
@@ -288,7 +323,10 @@ class Patient extends React.Component {
               const Pass = this.PassContent.value
               this.Pass(Pass)
             }
-            }>
+            }
+            >
+
+
               <div className="modal-header">
                 <h3 className="modal-title">Patient Registration</h3>
                 <button type="button" className="close text-danger" onClick={this.ToggleSubmit}>&times;</button>
@@ -354,7 +392,7 @@ class Patient extends React.Component {
                   })
               }
               }>
-                submit button
+                Register 
                   </button>
             </form>
           </Form>

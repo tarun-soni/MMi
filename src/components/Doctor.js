@@ -159,7 +159,6 @@ class Doctor extends React.Component {
       //  STORES VALUE BY GETIING DATA FROM BC & DISPLAYING
       showPatients: [],
       convertedId: '',
-
       lengthOfMed:'',
       mData: [],
       rData: [],
