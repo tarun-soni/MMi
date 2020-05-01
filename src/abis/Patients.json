@@ -2455,12 +2455,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xcfB84c766d3702ad459e731f7165ac43487EA789",
-      "transactionHash": "0x62b196fa552adaeceac6f3db2e3bc65d05790f8490c282276bbfb50ef0b36250"
+      "address": "0x61761b317705Ed0Bab81E5BE7A9BcFD9F9a12633",
+      "transactionHash": "0xa4902248255ffed939b3a1c405c5da66e38bd90253a9864ad232bb4417b536df"
     }
   },
   "schemaVersion": "3.0.23",
-  "updatedAt": "2020-04-19T17:54:01.260Z",
+  "updatedAt": "2020-05-01T12:21:04.206Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}

@@ -103,7 +103,7 @@ console.log('indexes',this.state.indexArrayofReport)
     let Cards = []
     for(let i = 0; i<this.state.indexArrayofReport.length ;i++){
       Cards.push(
-        <Card className="Dcard card" key={this.state._id}>
+        <Card className="Dcard card" >
           
           <h5>Reports:{this.state.rData[this.state.indexArrayofReport[i]]}</h5>
            <h5>Status:{this.state.sData[this.state.indexArrayofReport[i]]}</h5>
