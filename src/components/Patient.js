@@ -24,7 +24,7 @@ class Patient extends React.Component {
     else {
       window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
     }
-  } 
+  }
   async loadBlockchainData() {
     const web3 = window.web3
     // Load account
@@ -35,26 +35,26 @@ class Patient extends React.Component {
     const DoctorNetworkData = Presc.networks[networkId]
     if (networkData) {
       const contract = web3.eth.Contract(Patients.abi, networkData.address)
-      
+
       this.setState({ contract })
     }
-      else {
-        window.alert('Smart contract not deployed to detected network.')
-      }
-      if (DoctorNetworkData) {
-      
-        const DoctorContract = web3.eth.Contract(Presc.abi,DoctorNetworkData.address)
-        this.setState({ DoctorContract })
-      }
-        else {
-          window.alert('Smart contract not deployed to detected network.')
-        }
-
-      console.log('current logged in account ', this.state.account)
+    else {
+      window.alert('Smart contract not deployed to detected network.')
     }
-    async loadBlockchainGetData(){
-      
-      await this.loadBlockchainData()
+    if (DoctorNetworkData) {
+
+      const DoctorContract = web3.eth.Contract(Presc.abi, DoctorNetworkData.address)
+      this.setState({ DoctorContract })
+    }
+    else {
+      window.alert('Smart contract not deployed to detected network.')
+    }
+
+    console.log('current logged in account ', this.state.account)
+  }
+  async loadBlockchainGetData() {
+
+    await this.loadBlockchainData()
     /*  this.state.DoctorContract.methods.addMed(3,"med3")
         .send({ from: this.state.account }).then((r) => {
           return this.setState({
@@ -64,80 +64,79 @@ class Patient extends React.Component {
     /*  
       const MedData = await this.state.DoctorContract.methods.getData(1).call();
       console.log('MedData', MedData[1])*/
-      const displayingUid = await this.state.contract.methods.getPatientId(this.state._id).call()
+    const displayingUid = await this.state.contract.methods.getPatientId(this.state._id).call()
 
-      const convertedId = displayingUid.toNumber()
-      this.setState({ convertedId })
-      console.log('Id binded to patient is', convertedId)
-  
-      
-      const showPatients = await this.state.contract.methods.getPatient(this.state._id).call()
-      this.setState({ showPatients })
+    const convertedId = displayingUid.toNumber()
+    this.setState({ convertedId })
+    console.log('Id binded to patient is', convertedId)
+
+
+    const showPatients = await this.state.contract.methods.getPatient(this.state._id).call()
+    this.setState({ showPatients })
     /*
        this.setState({
           showPatients: [...this.state.showPatients, showPatients]
         })
       */
-     const savePass = await this.state.contract.methods.getPatientPass(this.state._id).call()
-     console.log('  pass',savePass)
-     console.log('inputpass',this.state._storedPass)
+    const savePass = await this.state.contract.methods.getPatientPass(this.state._id).call()
+    console.log('  pass', savePass)
+    console.log('inputpass', this.state._storedPass)
 
-     if( savePass !== null && this.state._storedPass ==savePass)
-     {
+    if (savePass !== null && this.state._storedPass == savePass) {
 
-     this.setState({ displayingEmail: showPatients[1] })
-     this.setState({ displayingName: showPatients[2] })
-     this.setState({ displayingBlood: showPatients[3] })
-     this.setState({ displayingGender: showPatients[4] })
-     this.setState({ displayingAddress: showPatients[5] })
+      this.setState({ displayingEmail: showPatients[1] })
+      this.setState({ displayingName: showPatients[2] })
+      this.setState({ displayingBlood: showPatients[3] })
+      this.setState({ displayingGender: showPatients[4] })
+      this.setState({ displayingAddress: showPatients[5] })
 
       console.log('disp email:::::   ', this.state.displayingEmail)
       console.log('show name::::: ', this.state.displayingName)
       console.log('show bg:::::  ', this.state.displayingBlood)
       console.log('show gender::::', this.state.displayingGender)
       console.log('show address::::: ', this.state.displayingAddress)
-     }
-     else{
+    }
+    else {
       window.alert('login failed');
 
-     this.setState({ displayingEmail: null })
-     this.setState({ displayingName: null })
-     this.setState({ displayingBlood: null })
-     this.setState({ displayingGender: null })
-     this.setState({ displayingAddress: null })
-     this.setState({_id: 1000000000})
-
-     }
-     
-
-//get reports 
-const MedData = await this.state.DoctorContract.methods.getData(this.state._id).call();
-
-this.setState({mData: MedData[1]})
-this.setState({lengthOfMed:MedData[1].length})
-
-console.log('MedData', this.state.mData)
-this.setState({rData: MedData[2]})
-console.log('reqreport', this.state.rData)
-this.setState({sData: MedData[3]})
-console.log('isresolved', this.state.sData)
-
+      this.setState({ displayingEmail: null })
+      this.setState({ displayingName: null })
+      this.setState({ displayingBlood: null })
+      this.setState({ displayingGender: null })
+      this.setState({ displayingAddress: null })
+      this.setState({ _id: 1000000000 })
 
     }
-    showCards = () =>{
-      let Cards = []
-      for(let i = 0; i<this.state.lengthOfMed ;i++){
-        Cards.push(
-          <Dcard
+
+
+    //get reports 
+    const MedData = await this.state.DoctorContract.methods.getData(this.state._id).call();
+
+    this.setState({ mData: MedData[1] })
+    this.setState({ lengthOfMed: MedData[1].length })
+
+    console.log('MedData', this.state.mData)
+    this.setState({ rData: MedData[2] })
+    console.log('reqreport', this.state.rData)
+    this.setState({ sData: MedData[3] })
+    console.log('isresolved', this.state.sData)
+
+
+  }
+  showCards = () => {
+    let Cards = []
+    for (let i = 0; i < this.state.lengthOfMed; i++) {
+      Cards.push(
+        <Dcard
           className="Dcard"
           mName={this.state.mData[i]}
           pReport={this.state.rData[i]}
           status={this.state.sData[i]}
-          />
-        )
-      }
-      return Cards
+        />
+      )
     }
+    return Cards
+  }
   //Modal Related Funtions
   getData = () => {
     this.loadBlockchainGetData()
@@ -165,13 +164,13 @@ console.log('isresolved', this.state.sData)
       return this.setState({ EmailId: this.state.EmailId, Name: this.state.Name, Blood: this.state.Blood, Gender: this.state.Gender, PhNo: this.state.PhNo, Add: this.state.Add })
     })*/
   }
-//STORING VALUES FROM FORM INTO _VARS
+  //STORING VALUES FROM FORM INTO _VARS
   EmailId(Email) {
     this.setState({ _mail: Email })
     console.log('Email ID', this.state._mail)
   }
-  Pass(Pass){
-    this.setState({_pass:Pass})
+  Pass(Pass) {
+    this.setState({ _pass: Pass })
     console.log('pass', this.state._pass)
   }
   Name(Name) {
@@ -190,9 +189,9 @@ console.log('isresolved', this.state.sData)
     this.setState({ _id: Uid })
     console.log('Uid state', this.state._id)
   }
-  
+
   inputPass(inputPass) {
-    this.setState({_storedPass:inputPass})
+    this.setState({ _storedPass: inputPass })
     console.log('Uid state', this.state.inputPass)
   }
   constructor(props) {
@@ -200,20 +199,20 @@ console.log('isresolved', this.state.sData)
     this.state = {
 
       // VALUES NEEDED FOR CONTRACT   
-      contract: null, 
+      contract: null,
       DoctorContract: null,  // stores value of contracts
       web3: null,
       account: null, // stores value of logged in account
-     
+
       // STORES FINAL STRING VALUE OF INPUT FIELDS
-      _mail: '',   
+      _mail: '',
       _name: '',
       _bgrp: '',
       _gender: '',
       //input during get data
       _id: '',
-      _pass:'',
-      _storedPass:'',
+      _pass: '',
+      _storedPass: '',
 
       //  STORES VALUE BY GETIING DATA FROM BC & DISPLAYING
       showPatients: [],
@@ -225,10 +224,10 @@ console.log('isresolved', this.state.sData)
       convertedId: '',
       displayingAddress: '',
 
-      lengthOfMed:'',
+      lengthOfMed: '',
       mData: [],
       rData: [],
-      sData: [] , 
+      sData: [],
 
       //  TOGGLE  
       isopen: false,
@@ -241,7 +240,7 @@ console.log('isresolved', this.state.sData)
     this.Gender = this.Gender.bind(this);
     this.Uid = this.Uid.bind(this);
     this.Pass = this.Pass.bind(this);
-    this.inputPass= this.inputPass.bind(this);
+    this.inputPass = this.inputPass.bind(this);
   }
   render() {
     return (
@@ -272,9 +271,9 @@ console.log('isresolved', this.state.sData)
                   className="form-control"
                   placeholder="Enter Unique ID"
                   required />
-                  <input
+                <input
                   id="postContent"
-                  type="text"
+                  type="password"
                   ref={(input) => { this.inputPassContent = input }}
                   className="form-control"
                   placeholder="Enter your Pass"
@@ -362,12 +361,12 @@ console.log('isresolved', this.state.sData)
                   required />
                 <input
                   id="postContent"
-                  type="text"
+                  type="password"
                   ref={(input) => { this.PassContent = input }}
                   className="ip form-control"
                   placeholder="Enter a strong password"
                   required />
-                  
+
               </div>
               <button type="submit" className="ops btn btn-block">Save Info</button>
               <hr />
@@ -392,7 +391,7 @@ console.log('isresolved', this.state.sData)
                   })
               }
               }>
-                Register 
+                Register
                   </button>
             </form>
           </Form>

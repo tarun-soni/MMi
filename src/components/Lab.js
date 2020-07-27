@@ -3,7 +3,7 @@ import Web3 from 'web3';
 import './App.css';
 import Meme from '../abis/Meme.json';
 import Presc from '../abis/Presc.json';
-import {Card} from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 const ipfsClient = require('ipfs-http-client')
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' }) // leaving out the arguments will default to these values
 class Lab extends Component {
@@ -38,45 +38,44 @@ class Lab extends Component {
       const memeHash = await contract.methods.get().call()
       this.setState({ memeHash })
       console.log(this.state.memeHash)
-      const randomt = await contract.methods.getRandomText().call()
-      this.setState({ randomt })
+
     } else {
       window.alert('Smart contract not deployed to detected network.')
     }
-    if(DoctorNetworkData){
+    if (DoctorNetworkData) {
       const DoctorContract = web3.eth.Contract(Presc.abi, DoctorNetworkData.address)
       this.setState({ DoctorContract })
-    }else{
+    } else {
       window.alert('Smart contract not deployed to detected network.')
     }
     console.log(accounts)
   }
-  async GetPatientDynamicData(){
+  async GetPatientDynamicData() {
     await this.loadBlockchainData()
     //getting prev records of patients
-     const MedData = await this.state.DoctorContract.methods.getData(this.state._id).call();
-     console.log('ID', MedData[0].toNumber())
-this.setState({rData: MedData[2]})
-console.log('reqreport', this.state.rData)
-this.setState({sData: MedData[3]})
-console.log('isresolved', this.state.sData)
-this.setState({lengthOfReport:MedData[2].length})
-   //  for(var i = 1;i<4;i++){
-       for(var j = 0;j<MedData[1].length;j++){
-        console.log('MedData', MedData[1][j])
-   }
-  //  }
-  for(let j = 0;j<=MedData[3].length;j++){
-    if(MedData[3][j] == "pending"){
-      console.log("reports required",MedData[2][j]);
-      this.setState({
-        indexArrayofReport: [...this.state.indexArrayofReport, j]
-      })
+    const MedData = await this.state.DoctorContract.methods.getData(this.state._id).call();
+    console.log('ID', MedData[0].toNumber())
+    this.setState({ rData: MedData[2] })
+    console.log('reqreport', this.state.rData)
+    this.setState({ sData: MedData[3] })
+    console.log('isresolved', this.state.sData)
+    this.setState({ lengthOfReport: MedData[2].length })
+    //  for(var i = 1;i<4;i++){
+    for (var j = 0; j < MedData[1].length; j++) {
+      console.log('MedData', MedData[1][j])
     }
-   }
-console.log('indexes',this.state.indexArrayofReport)
+    //  }
+    for (let j = 0; j <= MedData[3].length; j++) {
+      if (MedData[3][j] == "pending") {
+        console.log("reports required", MedData[2][j]);
+        this.setState({
+          indexArrayofReport: [...this.state.indexArrayofReport, j]
+        })
+      }
+    }
+    console.log('indexes', this.state.indexArrayofReport)
   }
-   getDynamicData = () => {
+  getDynamicData = () => {
     console.log("in get Dynamic")
     this.loadBlockchainData()
     this.GetPatientDynamicData()
@@ -85,30 +84,30 @@ console.log('indexes',this.state.indexArrayofReport)
     super(props)
     this.state = {
       memeHash: '',
-      memeHashArray:[],
+      memeHashArray: [],
       contract: null,
-      DoctorContract:'',
+      DoctorContract: '',
       web3: null,
       buffer: null,
       account: null,
-      _id: '' ,
-     rData:[],
-     sData:[] ,
-     lengthOfReport:'',
-     indexArrayofReport:[]
+      _id: '',
+      rData: [],
+      sData: [],
+      lengthOfReport: '',
+      indexArrayofReport: []
     }
     this.ShowReportInput = this.ShowReportInput.bind(this)
   }
-  showCards = () =>{
+  showCards = () => {
     let Cards = []
-    for(let i = 0; i<this.state.indexArrayofReport.length ;i++){
+    for (let i = 0; i < this.state.indexArrayofReport.length; i++) {
       Cards.push(
         <Card className="Dcard card" >
-          
+
           <h5>Reports:{this.state.rData[this.state.indexArrayofReport[i]]}</h5>
-           <h5>Status:{this.state.sData[this.state.indexArrayofReport[i]]}</h5>
-              <input type='file' onChange={this.captureFile} />
-              <input className="btns" type='submit' />
+          <h5>Status:{this.state.sData[this.state.indexArrayofReport[i]]}</h5>
+          <input type='file' onChange={this.captureFile} />
+          <input className="btns" type='submit' />
         </Card>
         // <Lcard
         // className="Dcard"
@@ -122,9 +121,9 @@ console.log('indexes',this.state.indexArrayofReport)
     return Cards
   }
   ShowReportInput(ShowReportInput) {
-    this.setState({_id: ShowReportInput})
+    this.setState({ _id: ShowReportInput })
   }
-    captureFile = (event) => {
+  captureFile = (event) => {
     event.preventDefault()
     const file = event.target.files[0]
     const reader = new window.FileReader()
@@ -137,74 +136,73 @@ console.log('indexes',this.state.indexArrayofReport)
   onSubmit = (event) => {
     event.preventDefault()
     console.log("Submitting file to ipfs...")
-    if(this.state.buffer == null){
+    if (this.state.buffer == null) {
       window.alert('no file chosen')
-    }else{
+    } else {
       ipfs.add(this.state.buffer, (error, result) => {
         console.log('Ipfs result', result[0])
-      if (error) {
-        console.error(error)
-        return
-      }
-       this.setState({ memeHash: result[0].hash })
-    this.state.memeHashArray.push(result[0].hash)
-    window.alert('sucessfully submitted')
-  /*    this.state.contract.methods.set(result[0].hash).send({ from: this.state.account }).then((r) => {
-        return this.setState({ memeHash: result[0].hash })
-      })*/
-    })
-  }
+        if (error) {
+          console.error(error)
+          return
+        }
+        this.setState({ memeHash: result[0].hash })
+        this.state.memeHashArray.push(result[0].hash)
+        window.alert('sucessfully submitted')
+        /*    this.state.contract.methods.set(result[0].hash).send({ from: this.state.account }).then((r) => {
+              return this.setState({ memeHash: result[0].hash })
+            })*/
+      })
+    }
   }
   render() {
     return (
       <div>
-         <div className="DisplayCard container-fluid mt-5">
-         <form onSubmit={(event) => {
-                  event.preventDefault()
-                  const ShowReportInput = this.showReportInputContent.value
-                  this.ShowReportInput(ShowReportInput)
-                }}>
+        <div className="DisplayCard container-fluid mt-5">
+          <form onSubmit={(event) => {
+            event.preventDefault()
+            const ShowReportInput = this.showReportInputContent.value
+            this.ShowReportInput(ShowReportInput)
+          }}>
             <div className="input-group mb-3">
-            <input
-            id="postContent"
-            type="number"
-            ref={(input) => { this.showReportInputContent = input }}
-            className="form-control"
-            placeholder="Enter Patient ID"
-            required
-            />
-            <div className="input-group-append">
-           <button className="btn btn-success" onClick={this.getDynamicData}>Get Reports</button>
-           </div>
-           </div>
-           <button className="btn btn-info hashSubmit" onClick={(event) => {
-           console.log('memeHashArrayI', this.state.memeHashArray)
-           console.log('before updating',this.state.rData)
-           console.log('before updating',this.state.sData)
-            for(let i = 0 ;i<this.state.memeHashArray.length;i++)
-            {
-              this.state.rData[this.state.indexArrayofReport[i]] =  this.state.memeHashArray[i]
-              this.state.sData[this.state.indexArrayofReport[i]] = "true";
-            }
-              this.state.DoctorContract.methods.updateArray(this.state._id,this.state.rData, this.state.sData)
-              .send({ from: this.state.account }).then((r) => {
-                return this.setState({
-                  rData: this.state.rData,
-                  sData:this.state.sData
+              <input
+                id="postContent"
+                type="number"
+                ref={(input) => { this.showReportInputContent = input }}
+                className="form-control"
+                placeholder="Enter Patient ID"
+                required
+              />
+              <div className="input-group-append">
+                <button className="btn btn-success" onClick={this.getDynamicData}>Get Reports</button>
+              </div>
+            </div>
+            <button className="btn btn-info hashSubmit" onClick={(event) => {
+              console.log('memeHashArrayI', this.state.memeHashArray)
+              console.log('before updating', this.state.rData)
+              console.log('before updating', this.state.sData)
+              for (let i = 0; i < this.state.memeHashArray.length; i++) {
+                this.state.rData[this.state.indexArrayofReport[i]] = this.state.memeHashArray[i]
+                this.state.sData[this.state.indexArrayofReport[i]] = "true";
+              }
+              this.state.DoctorContract.methods.updateArray(this.state._id, this.state.rData, this.state.sData)
+                .send({ from: this.state.account }).then((r) => {
+                  return this.setState({
+                    rData: this.state.rData,
+                    sData: this.state.sData
+                  })
                 })
-              })
-            console.log('after updating',this.state.rData)
-              console.log('after updating',this.state.sData)
-         }}> Upload All reports</button>
-           </form>
-         </div>
-         <div className="modal-lg hashSubmit">
-         <form onSubmit={this.onSubmit} >
-                {this.showCards()}
-            </form>
-         </div>
+              console.log('after updating', this.state.rData)
+              console.log('after updating', this.state.sData)
+            }}> Upload All reports</button>
+          </form>
+        </div>
+        <div className="modal-lg hashSubmit">
+          <form onSubmit={this.onSubmit} >
+            {this.showCards()}
+          </form>
+        </div>
         <div className="centor container-fluid mt-5">
-       {/* <iframe src={`https://ipfs.infura.io/ipfs/${this.state.memeHash}`} height="500" width="500"></iframe> */}
+          {/* <iframe src={`https://ipfs.infura.io/ipfs/${this.state.memeHash}`} height="500" width="500"></iframe> */}
         </div>
       </div >
     );
