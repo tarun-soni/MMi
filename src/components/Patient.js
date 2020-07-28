@@ -5,7 +5,6 @@ import Web3 from 'web3';
 import Form from './Modal';
 import { Card, Table } from 'react-bootstrap';
 import Patients from '../abis/Patients.json';
-import { ControlLabel } from 'react-bootstrap';
 import Dcard from './Dcard'
 import Presc from '../abis/Presc.json'
 class Patient extends React.Component {
@@ -55,20 +54,10 @@ class Patient extends React.Component {
   async loadBlockchainGetData() {
 
     await this.loadBlockchainData()
-    /*  this.state.DoctorContract.methods.addMed(3,"med3")
-        .send({ from: this.state.account }).then((r) => {
-          return this.setState({
-            displayingUid: null
-          })
-        })*/
-    /*  
-      const MedData = await this.state.DoctorContract.methods.getData(1).call();
-      console.log('MedData', MedData[1])*/
     const displayingUid = await this.state.contract.methods.getPatientId(this.state._id).call()
 
     const convertedId = displayingUid.toNumber()
     this.setState({ convertedId })
-    console.log('Id binded to patient is', convertedId)
 
 
     const showPatients = await this.state.contract.methods.getPatient(this.state._id).call()
@@ -79,22 +68,15 @@ class Patient extends React.Component {
         })
       */
     const savePass = await this.state.contract.methods.getPatientPass(this.state._id).call()
-    console.log('  pass', savePass)
-    console.log('inputpass', this.state._storedPass)
 
-    if (savePass !== null && this.state._storedPass == savePass) {
+
+    if (savePass !== null && this.state._storedPass === savePass) {
 
       this.setState({ displayingEmail: showPatients[1] })
       this.setState({ displayingName: showPatients[2] })
       this.setState({ displayingBlood: showPatients[3] })
       this.setState({ displayingGender: showPatients[4] })
       this.setState({ displayingAddress: showPatients[5] })
-
-      console.log('disp email:::::   ', this.state.displayingEmail)
-      console.log('show name::::: ', this.state.displayingName)
-      console.log('show bg:::::  ', this.state.displayingBlood)
-      console.log('show gender::::', this.state.displayingGender)
-      console.log('show address::::: ', this.state.displayingAddress)
     }
     else {
       window.alert('login failed');
@@ -115,11 +97,8 @@ class Patient extends React.Component {
     this.setState({ mData: MedData[1] })
     this.setState({ lengthOfMed: MedData[1].length })
 
-    console.log('MedData', this.state.mData)
     this.setState({ rData: MedData[2] })
-    console.log('reqreport', this.state.rData)
     this.setState({ sData: MedData[3] })
-    console.log('isresolved', this.state.sData)
 
 
   }
@@ -127,7 +106,7 @@ class Patient extends React.Component {
     let Cards = []
     for (let i = 0; i < this.state.lengthOfMed; i++) {
       Cards.push(
-        <Dcard
+        <Dcard key={i}
           className="Dcard"
           mName={this.state.mData[i]}
           pReport={this.state.rData[i]}
@@ -140,7 +119,6 @@ class Patient extends React.Component {
   //Modal Related Funtions
   getData = () => {
     this.loadBlockchainGetData()
-    console.log('in getData')
   };
   ToggleSubmit = () => {
     this.setState({
@@ -156,43 +134,29 @@ class Patient extends React.Component {
     window.location.reload(false)
   }
   //Modal Related Fucntion Ends
-  submit = (event) => {
-    event.preventDefault()
-    //set data
-    console.log("in on sub")
-    /* this.state.contract.methods.addP(this.state.EmailId, this.state.Name, this.state.Blood, this.state.Gender, this.state.PhNo, this.state.Add).send({ from: this.state.account }).then((r) => {
-      return this.setState({ EmailId: this.state.EmailId, Name: this.state.Name, Blood: this.state.Blood, Gender: this.state.Gender, PhNo: this.state.PhNo, Add: this.state.Add })
-    })*/
-  }
+
   //STORING VALUES FROM FORM INTO _VARS
   EmailId(Email) {
     this.setState({ _mail: Email })
-    console.log('Email ID', this.state._mail)
   }
   Pass(Pass) {
     this.setState({ _pass: Pass })
-    console.log('pass', this.state._pass)
   }
   Name(Name) {
     this.setState({ _name: Name })
-    console.log('Name', Name)
   }
   Blood(BloodGrp) {
     this.setState({ _bgrp: BloodGrp })
-    console.log('Blood Group', BloodGrp)
   }
   Gender(Gender) {
     this.setState({ _gender: Gender })
-    console.log('Gender', Gender)
   }
   Uid(Uid) {
     this.setState({ _id: Uid })
-    console.log('Uid state', this.state._id)
   }
 
   inputPass(inputPass) {
     this.setState({ _storedPass: inputPass })
-    console.log('Uid state', this.state.inputPass)
   }
   constructor(props) {
     super(props)
@@ -371,7 +335,6 @@ class Patient extends React.Component {
               <button type="submit" className="ops btn btn-block">Save Info</button>
               <hr />
               <button className="ops btn btn-block" onClick={(event) => {
-                console.log("Submit button pressed")
                 this.state.contract.methods.setPatientData(
                   this.state._mail,
                   this.state._name,

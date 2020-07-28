@@ -1,6 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Table, Card} from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import Form from './Modal';
 import './App.css';
 import Dcard from './Dcard';
@@ -53,56 +53,40 @@ class Doctor extends React.Component {
   }
   async GetPatientStaticData() {
     await this.loadBlockchainData()
-  
-  //getting id from BC
+
+    //getting id from BC
     const displayingUid = await this.state.contract.methods.getPatientId(this.state._id).call()
     const convertedId = displayingUid.toNumber()
     this.setState({ convertedId })
-    console.log('Id binded to patient is', convertedId)
-  //getting Patients static data from BC
+    //getting Patients static data from BC
     const showPatients = await this.state.contract.methods.getPatient(this.state._id).call()
     this.setState({ showPatients })
-    
-     //  this.setState({   showPatients: [...this.state.showPatients, showPatients]})
-    
-  /*
-      console.log('disp email:::::   ', this.state.showPatients[1])
-      console.log('show name::::: ', this.state.showPatients[2])
-      console.log('show bg:::::  ', this.state.showPatients[3])
-      console.log('show gender::::', this.state.showPatients[4])
-      console.log('show address::::: ', this.state.showPatients[5])
-    */
+
 
   }
 
 
-  async GetPatientDynamicData(){
-   await this.loadBlockchainData()
-   //getting prev records of patients
+  async GetPatientDynamicData() {
+    await this.loadBlockchainData()
+    //getting prev records of patients
     const MedData = await this.state.DoctorContract.methods.getData(this.state._showPresInput).call();
 
-    console.log(MedData);
-    console.log('ID', MedData[0].toNumber())
 
-    this.setState({mData: MedData[1]})
-    this.setState({lengthOfMed:MedData[1].length})
-    
-    console.log('MedData', this.state.mData)
-    this.setState({rData: MedData[2]})
-    console.log('reqreport', this.state.rData)
-    this.setState({sData: MedData[3]})
-    console.log('isresolved', this.state.sData)
+    this.setState({ mData: MedData[1] })
+    this.setState({ lengthOfMed: MedData[1].length })
+
+    this.setState({ rData: MedData[2] })
+    this.setState({ sData: MedData[3] })
   }
 
 
-//normal methods of get which calls thier respective async functions 
+  //normal methods of get which calls thier respective async functions 
   getStaticData = () => {
     this.loadBlockchainData()
-     this.GetPatientStaticData()
+    this.GetPatientStaticData()
   };
 
   getDynamicData = () => {
-    console.log("in get Dynamic",this.state._showPresInput)
     this.loadBlockchainData()
     this.GetPatientDynamicData()
 
@@ -110,13 +94,10 @@ class Doctor extends React.Component {
 
   prescribeMedicineButton = () => {
     this.loadBlockchainData()
-    console.log('in PrescribeMedicineButton')
-    console.log('PresID state', this.state._presid)
   }
 
   Uid(Uid) {
     this.setState({ _id: Uid })
-    console.log('Uid state', this.state._id)
   }
 
   PresID(PresID) {
@@ -125,16 +106,13 @@ class Doctor extends React.Component {
   Medinput(Medinput) {
     this.setState({ _medInput: Medinput })
   }
-  ShowPresInput(ShowPresInput){
-    this.setState({_showPresInput: ShowPresInput})
+  ShowPresInput(ShowPresInput) {
+    this.setState({ _showPresInput: ShowPresInput })
   }
-  ReportInput(ReportInput){
-    this.setState({_reportInput: ReportInput})
+  ReportInput(ReportInput) {
+    this.setState({ _reportInput: ReportInput })
   }
-  // getArray(getArray){
-  //   this.setState({cData: getArray})
-  // }
-  
+
   constructor(props) {
     super(props)
     this.state = {
@@ -150,19 +128,19 @@ class Doctor extends React.Component {
       isenter: false,
 
       //input during get data
-      _id: '',  
+      _id: '',
       _presid: '',    // patient id  inputwhen prescribing
-      _medInput:'',   // medicine  input when prescribing
-      _showPresInput:'',  // patient id input when geting prev records
-      _reportInput:'',
+      _medInput: '',   // medicine  input when prescribing
+      _showPresInput: '',  // patient id input when geting prev records
+      _reportInput: '',
 
       //  STORES VALUE BY GETIING DATA FROM BC & DISPLAYING
       showPatients: [],
       convertedId: '',
-      lengthOfMed:'',
+      lengthOfMed: '',
       mData: [],
       rData: [],
-      sData: [] 
+      sData: []
     }
 
     this.Uid = this.Uid.bind(this);
@@ -173,20 +151,20 @@ class Doctor extends React.Component {
 
   }
 
-showCards = () =>{
-  let Cards = []
-  for(let i = 0; i<this.state.lengthOfMed ;i++){
-    Cards.push(
-      <Dcard
-      className="Dcard"
-      mName={this.state.mData[i]}
-      pReport={this.state.rData[i]}
-      status={this.state.sData[i]}
-      />
-    )
+  showCards = () => {
+    let Cards = []
+    for (let i = 0; i < this.state.lengthOfMed; i++) {
+      Cards.push(
+        <Dcard key={i}
+          className="Dcard"
+          mName={this.state.mData[i]}
+          pReport={this.state.rData[i]}
+          status={this.state.sData[i]}
+        />
+      )
+    }
+    return Cards
   }
-  return Cards
-}
 
   TogglePrev = () => {
     this.setState({
@@ -221,9 +199,9 @@ showCards = () =>{
                     const PresID = this.PresIDidContent.value
                     this.PresID(PresID)
                     const Medinput = this.MedContent.value
-                    this.Medinput(Medinput)    
+                    this.Medinput(Medinput)
                     const ReportInput = this.ReportInputContent.value
-                    this.ReportInput(ReportInput) 
+                    this.ReportInput(ReportInput)
                   }}>
                     <div className="modal-header">
                       <h3 className="modal-title">Prescribe Med</h3>
@@ -241,19 +219,18 @@ showCards = () =>{
                       type="text"
                       className="form-control"
                       placeholder="Prescribe Medicine"
-                    ref={(input) => { this.MedContent = input }}
+                      ref={(input) => { this.MedContent = input }}
                     />
                     <input
                       id="postContent"
                       type="text"
                       className="form-control"
                       placeholder="Request Report"
-                    ref={(input) => { this.ReportInputContent = input }}
+                      ref={(input) => { this.ReportInputContent = input }}
                     />
                     <hr />
-                    <button type = "submit" className="btn btnDoc" >Save Info</button>
-                    <button type = "submit" className="btn btnDoc" onClick={(event) => {
-                      console.log(this.state._presid)
+                    <button type="submit" className="btn btnDoc" >Save Info</button>
+                    <button type="submit" className="btn btnDoc" onClick={(event) => {
                       this.state.DoctorContract.methods.addMed(this.state._presid, this.state._medInput, this.state._reportInput)
                         .send({ from: this.state.account }).then((r) => {
                           return this.setState({
@@ -269,36 +246,36 @@ showCards = () =>{
               {/* Previous Card */}
               <Form isopen={this.state.isopen}>
                 <div className="DocCard center-block modal-lg">
-                <form onSubmit={(event) => {
-                  event.preventDefault()
-                  const ShowPresInput = this.showPresInputContent.value
-                  this.ShowPresInput(ShowPresInput)
-                }}>
+                  <form onSubmit={(event) => {
+                    event.preventDefault()
+                    const ShowPresInput = this.showPresInputContent.value
+                    this.ShowPresInput(ShowPresInput)
+                  }}>
                     <div className="modal-header">
                       <h3>Patient History</h3>
-                      <button type="button" className="close text-danger" onClick={this.TogglePrev}>&times;</button>                      
+                      <button type="button" className="close text-danger" onClick={this.TogglePrev}>&times;</button>
                     </div>
                     <div className="modal-body">
-                    <div class="input-group mb-3">
-                    <input
-                              id="postContent"
-                              type="number"
-                              ref={(input) => { this.showPresInputContent = input }}
-                              className="form-control"
-                              placeholder="Enter Patient ID who's records you want to see"
-                              required />
-                              <div className="input-group-append">
-                      <button className="btn btnColl" onClick ={ this.getDynamicData }> Get Patient History</button>
+                      <div className="input-group mb-3">
+                        <input
+                          id="postContent"
+                          type="number"
+                          ref={(input) => { this.showPresInputContent = input }}
+                          className="form-control"
+                          placeholder="Enter Patient ID who's records you want to see"
+                          required />
+                        <div className="input-group-append">
+                          <button className="btn btnColl" onClick={this.getDynamicData}> Get Patient History</button>
+                        </div>
+                      </div>
+                      <div className="cardcon">
+                        {/* dynamic cards*/}
+                        {this.showCards()}
+                        {/* dynamic cards */}
                       </div>
                     </div>
-                    <div className="cardcon">
-                      {/* dynamic cards*/}
-                      {this.showCards()}
-                    {/* dynamic cards */}
-                    </div>
-                    </div>
                   </form>
-                
+
                 </div>
               </ Form>
             </div>
