@@ -1,9 +1,9 @@
 {
-  "short_name": "Starter Kit",
-  "name": "Dapp University Starter Kit",
+  "short_name": "mmi",
+  "name": "maintaining medical info",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "med-icon.svg",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     }
