@@ -37,7 +37,9 @@ class Lab extends Component {
       this.setState({ contract })
       const memeHash = await contract.methods.get().call()
       this.setState({ memeHash })
-
+      console.log(this.state.memeHash)
+      const randomt = await contract.methods.getRandomText().call()
+      this.setState({ randomt })
     } else {
       window.alert('Smart contract not deployed to detected network.')
     }
@@ -53,17 +55,29 @@ class Lab extends Component {
     await this.loadBlockchainData()
     //getting prev records of patients
     const MedData = await this.state.DoctorContract.methods.getData(this.state._id).call();
+    console.log('ID', MedData[0].toNumber())
+    this.setState({ rData: MedData[2] })
+    console.log('reqreport', this.state.rData)
     this.setState({ sData: MedData[3] })
-
+    console.log('isresolved', this.state.sData)
+    this.setState({ lengthOfReport: MedData[2].length })
+    //  for(var i = 1;i<4;i++){
+    for (var j = 0; j < MedData[1].length; j++) {
+      console.log('MedData', MedData[1][j])
+    }
+    //  }
     for (let j = 0; j <= MedData[3].length; j++) {
-      if (MedData[3][j] === "pending") {
+      if (MedData[3][j] == "pending") {
+        console.log("reports required", MedData[2][j]);
         this.setState({
           indexArrayofReport: [...this.state.indexArrayofReport, j]
         })
       }
     }
+    console.log('indexes', this.state.indexArrayofReport)
   }
   getDynamicData = () => {
+    console.log("in get Dynamic")
     this.loadBlockchainData()
     this.GetPatientDynamicData()
   };
@@ -89,14 +103,20 @@ class Lab extends Component {
     let Cards = []
     for (let i = 0; i < this.state.indexArrayofReport.length; i++) {
       Cards.push(
-        <Card className="Dcard card" key=' ' >
+        <Card className="Dcard card" >
 
           <h5>Reports:{this.state.rData[this.state.indexArrayofReport[i]]}</h5>
           <h5>Status:{this.state.sData[this.state.indexArrayofReport[i]]}</h5>
           <input type='file' onChange={this.captureFile} />
           <input className="btns" type='submit' />
         </Card>
-
+        // <Lcard
+        // className="Dcard"
+        // Index = {i}
+        // pReport={this.state.rData[i]}
+        // status={this.state.sData[i]}
+        // captureFile={this.state.captureFile}
+        // />
       )
     }
     return Cards
@@ -129,7 +149,9 @@ class Lab extends Component {
         this.setState({ memeHash: result[0].hash })
         this.state.memeHashArray.push(result[0].hash)
         window.alert('sucessfully submitted')
-
+        /*    this.state.contract.methods.set(result[0].hash).send({ from: this.state.account }).then((r) => {
+              return this.setState({ memeHash: result[0].hash })
+            })*/
       })
     }
   }
@@ -156,6 +178,9 @@ class Lab extends Component {
               </div>
             </div>
             <button className="btn btn-info hashSubmit" onClick={(event) => {
+              console.log('memeHashArrayI', this.state.memeHashArray)
+              console.log('before updating', this.state.rData)
+              console.log('before updating', this.state.sData)
               for (let i = 0; i < this.state.memeHashArray.length; i++) {
                 this.state.rData[this.state.indexArrayofReport[i]] = this.state.memeHashArray[i]
                 this.state.sData[this.state.indexArrayofReport[i]] = "true";
@@ -167,6 +192,8 @@ class Lab extends Component {
                     sData: this.state.sData
                   })
                 })
+              console.log('after updating', this.state.rData)
+              console.log('after updating', this.state.sData)
             }}> Upload All reports</button>
           </form>
         </div>
@@ -176,6 +203,7 @@ class Lab extends Component {
           </form>
         </div>
         <div className="centor container-fluid mt-5">
+          {/* <iframe src={`https://ipfs.infura.io/ipfs/${this.state.memeHash}`} height="500" width="500"></iframe> */}
         </div>
       </div >
     );
