@@ -87,12 +87,16 @@ class Lab extends Component {
   }
   getDynamicData = () => {
     console.log('in get Dynamic');
+    this.setState(this.initialState);
     this.loadBlockchainData();
-    this.GetPatientDynamicData();
+    this.GetPatientDynamicData().then((s) =>
+      console.log(`this.state`, this.state)
+    );
   };
+
   constructor(props) {
     super(props);
-    this.state = {
+    const initialState = {
       memeHash: '',
       memeHashArray: [],
       contract: null,
@@ -106,6 +110,7 @@ class Lab extends Component {
       lengthOfReport: '',
       indexArrayofReport: []
     };
+    this.state = initialState;
     this.ShowReportInput = this.ShowReportInput.bind(this);
   }
   showCards = () => {
@@ -221,10 +226,10 @@ class Lab extends Component {
                   .updateArray(this.state._id, _rData, _sData)
                   .send({ from: this.state.account })
                   .then((r) => {
-                    return this.setState({
-                      rData: _rData,
-                      sData: _sData
-                    });
+                    // return this.setState({
+                    //   rData,
+                    //   sData
+                    // });
                   });
                 console.log('after updating', this.state.rData);
                 console.log('after updating', this.state.sData);
